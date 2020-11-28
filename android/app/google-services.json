@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "152872836351",
+    "firebase_url": "https://ablelo-chat.firebaseio.com",
+    "project_id": "ablelo-chat",
+    "storage_bucket": "ablelo-chat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:152872836351:android:9cb09341927508b09580ca",
+        "android_client_info": {
+          "package_name": "com.example.ablelo_chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "152872836351-hsc1i6cbt2gapmmku6t0irstv1eb9qe2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAz1dz9hw-A8d_ZsjwO6fLI-Jx8SmLb0ao"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "152872836351-hsc1i6cbt2gapmmku6t0irstv1eb9qe2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
