@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -7,129 +8,116 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String phoneNumber;
-  String verificationId;
-  String otp;
-  String authStatus = '';
-
-  Future<void> verifyPhoneNumber(BuildContext context) async {
-    await FirebaseAuth.instance.verifyPhoneNumber(
-        phoneNumber: phoneNumber,
-        timeout: const Duration(seconds: 30),
-        verificationCompleted: (AuthCredential authCredential) {
-          setState(() {
-            authStatus = 'Your phone number is successfully verified';
-          });
-        },
-        verificationFailed: (FirebaseAuthException authException) {
-          setState(() {
-            authStatus = 'Authentication Failed';
-          });
-        },
-        codeSent: (String verId, [int forceCodeResent]) {
-          verificationId = verId;
-          setState(() {
-            authStatus = "OTP has been successfully sent";
-          });
-          otpDialogBox(context).then((value) {});
-        },
-        codeAutoRetrievalTimeout: (String verId) {
-          verificationId = verId;
-          setState(() {
-            authStatus = 'TIMED OUT';
-          });
-        });
+  Widget _buildPageContent(BuildContext context) {
+    return Container(
+      color: Color(0xffb4d4c0),
+      child: ListView(
+        children: <Widget>[
+          SizedBox(
+            height: 30.0,
+          ),
+          //CircleAvatar(child: PNetworkImage(origami), maxRadius: 50, backgroundColor: Colors.transparent,),
+          SizedBox(
+            height: 20.0,
+          ),
+          _buildLoginForm(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              FloatingActionButton(
+                mini: true,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                backgroundColor: Color(0xff3f7b82),
+                child: Icon(Icons.arrow_back),
+              )
+            ],
+          )
+        ],
+      ),
+    );
   }
 
-  otpDialogBox(BuildContext context) {
-    return showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Enter your 6 Digit OTP"),
-            content: Padding(
-              padding: EdgeInsets.all(8.0),
-              child: TextField(
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(40.0)),
-                )),
-                onChanged: (String value) {
-                  otp = value;
-                },
+  Container _buildLoginForm() {
+    return Container(
+      padding: EdgeInsets.all(20.0),
+      child: Stack(
+        children: <Widget>[
+          ClipPath(
+            clipper: RoundedDiagonalPathClipper(),
+            child: Container(
+              height: 400,
+              padding: EdgeInsets.all(10.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                color: Colors.white,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(
+                    height: 90.0,
+                  ),
+                  Container(
+                      padding: EdgeInsets.symmetric(horizontal: 20.0),
+                      child: TextField(
+                        style: TextStyle(color: Color(0xff3f7b82)),
+                        decoration: InputDecoration(
+                            hintText: "Phone No",
+                            hintStyle: TextStyle(color: Color(0xff3f7b82)),
+                            border: InputBorder.none,
+                            icon: Icon(
+                              Icons.phone_iphone,
+                              color: Color(0xff3f7b82),
+                            )),
+                      )),
+                  Container(
+                    child: Divider(
+                      color: Color(0xff3f7b82),
+                    ),
+                    padding:
+                        EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10.0),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                ],
               ),
             ),
-            contentPadding: EdgeInsets.all(10.0),
-            actions: <Widget>[
-              FlatButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  signIn(otp);
-                },
-                child: Text("Submit"),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              CircleAvatar(
+                radius: 40.0,
+                backgroundColor: Color(0xff3f7b82),
+                child: Icon(Icons.person, color: Colors.white,),
               ),
             ],
-          );
-        });
-  }
-
-  Future<void> signIn(String otp) async {
-    await FirebaseAuth.instance
-        .signInWithCredential(PhoneAuthProvider.credential(
-      verificationId: verificationId,
-      smsCode: otp,
-    ));
+          ),
+          Container(
+            height: 420,
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: RaisedButton(
+                onPressed: () {},
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(40.0)),
+                child: Text("Send OTP", style: TextStyle(color: Colors.white70)),
+                color: Color(0xff3f7b82),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SizedBox(
-              height: 10.0,
-            ),
-            Text("OTP Authentication"),
-            Padding(
-              padding: EdgeInsets.all(16.0),
-              child: TextField(
-                keyboardType: TextInputType.phone,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(40.0))),
-                  filled: true,
-                  prefixIcon: Icon(
-                    Icons.phone_iphone,
-                    color: Colors.white24,
-                  ),
-                  hintStyle: TextStyle(color: Colors.grey.shade800),
-                  hintText: 'Enter your phone number',
-                  fillColor: Colors.white70,
-                ),
-                onChanged: (value) {
-                  phoneNumber = value;
-                },
-              ),
-            ),
-            SizedBox(
-              height: 10.0,
-            ),
-            RaisedButton(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30)),
-              onPressed: () =>
-                  phoneNumber == null ? null : verifyPhoneNumber(context),
-              child: Text(
-                "Generate OTP",
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          ],
-        ),
-      ),
+      body: _buildPageContent(context),
     );
   }
 }

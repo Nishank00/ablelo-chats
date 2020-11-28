@@ -1,6 +1,8 @@
 import 'package:ablelo_chat/Screens/chat_page.dart';
 import 'package:ablelo_chat/Screens/discover_page.dart';
+import 'package:ablelo_chat/Screens/otp_enter.dart';
 import 'package:ablelo_chat/Screens/profile_page.dart';
+import 'package:ablelo_chat/Screens/signup_page.dart';
 import 'package:flutter/material.dart';
 //import 'Screens/splashpage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -34,7 +36,7 @@ class MyApp extends StatelessWidget {
       //     return HomePage();
       //   },
       // ),
-      home: DiscoverPage(),
+      home: SignupPage(),
     );
   }
 }
